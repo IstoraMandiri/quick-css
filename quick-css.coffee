@@ -1,31 +1,34 @@
+# A bit of config
+defaultCollectionId = 'main'
+
+# Exported to project
 quickCss =
   col: new Mongo.Collection '_quick_css'
+  set: (css, _id='main') ->
+    quickCss.col.upsert {_id: _id}, {$set: {css: css}}
 
-  set: (css) ->
-    quickCss.col.update {_id: 'main'},
-      $set:
-        css: css
-
+# CLIENT ONLY
 if Meteor.isClient
-  $cssBox = $('<style>')
 
+  # Start DDP Subscription
+  Meteor.subscribe '_quick_css'
+
+  # Create an empty <style> element
+  $cssBox = $('<style>')
+  # Append it to the head of the page
   $(document).ready ->
     $('head').append $cssBox
 
+  # User tracker on quickCss.col and inject to head
   Deps.autorun ->
-    $cssBox.html quickCss.col.findOne({_id:'main'})?.css
+    $cssBox.html quickCss.col.findOne({_id: defaultCollectionId})?.css
 
-  Meteor.subscribe '_quick_css'
-
+# SERVER ONLY
 if Meteor.isServer
 
+  # Regular DDP publish
   Meteor.publish '_quick_css', ->
-    quickCss.col.find({_id:'main'})
+    quickCss.col.find({_id: defaultCollectionId})
 
-  FastRender.onAllRoutes ->
-    @subscribe '_quick_css'
-
-  unless quickCss.col.findOne('main')
-    quickCss.col.insert
-      _id: 'main'
-      css: ''
+  # Use Fastrender to inject quickCss subscription on all routes
+  FastRender.onAllRoutes -> @subscribe '_quick_css'
