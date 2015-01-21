@@ -1,11 +1,11 @@
 Package.describe({
   summary: "Simple Collection-Based CSS Editing",
-  version: "0.1.0",
+  version: "0.1.1",
   name: 'hitchcott:quick-css',
   git: "https://github.com/hitchcott/quick-css"
 });
 
-Package.onUse(function(api) {
+Package.onUse(function (api) {
   api.versionsFrom('METEOR@1.0.2.1');
   api.use([
     'jquery'
@@ -23,4 +23,15 @@ Package.onUse(function(api) {
   ], ['client', 'server']);
 
   api.export('quickCss')
+});
+
+Package.on_test(function (api) {
+
+  api.use([
+    'tinytest', 'test-helpers'
+  ], ['client'])
+
+  api.addFiles([
+    'quick-css-tests.js'
+  ], ['client'])
 });

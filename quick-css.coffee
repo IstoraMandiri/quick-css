@@ -18,10 +18,9 @@ if Meteor.isClient
   Meteor.subscribe '_quick_css'
 
   # Create an empty <style> element
-  $cssBox = $('<style id="_quick_css">')
+  $cssBox = $ '<style id="_quick_css">'
   # Append it to the head of the page
-  $(document).ready ->
-    $('head').append $cssBox
+  .appendTo 'head'
 
   # User tracker on quickCss.col and inject to head
   Deps.autorun ->
@@ -32,11 +31,11 @@ if Meteor.isServer
 
   # Regular DDP publish
   Meteor.publish '_quick_css', ->
-    quickCss.col.find({_id: defaultCollectionId})
+    quickCss.col.find()
 
   # Use Fastrender to inject quickCss subscription on all routes
   FastRender.onAllRoutes -> @subscribe '_quick_css'
 
   # create default document on first load
   unless quickCss.get()
-    quickCss.insert {_id:defaultCollectionId}
+    quickCss.col.insert {_id:defaultCollectionId}

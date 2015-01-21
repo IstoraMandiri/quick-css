@@ -1,0 +1,4 @@
+
+Tinytest.add('', function (test) {
+
+})
