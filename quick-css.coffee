@@ -34,8 +34,9 @@ if Meteor.isServer
     quickCss.col.find()
 
   # Use Fastrender to inject quickCss subscription on all routes
-  FastRender.onAllRoutes -> @subscribe '_quick_css'
+  FastRender.onAllRoutes ->
+    @subscribe '_quick_css'
 
   # create default document on first load
-  unless quickCss.get()
-    quickCss.col.insert {_id:defaultCollectionId}
+  unless quickCss.col.findOne({_id: defaultCollectionId})
+    quickCss.col.insert {_id: defaultCollectionId, css: ''}

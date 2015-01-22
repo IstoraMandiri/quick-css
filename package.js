@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Simple Collection-Based CSS Editing",
-  version: "0.1.1",
+  version: "0.1.3",
   name: 'hitchcott:quick-css',
   git: "https://github.com/hitchcott/quick-css"
 });
